@@ -1,8 +1,25 @@
 import React, { useState } from 'react'
-import { Mail, Linkedin, Github } from 'lucide-react'
+import { Mail, Linkedin, Github, Phone } from 'lucide-react'
 import FadeIn from './FadeIn'
 import ContactButton from './ContactButton'
 
+
+const WhatsAppIcon: React.FC<{ size?: number }> = ({ size = 24 }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21" />
+    <path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" />
+  </svg>
+)
 
 const ContactSection: React.FC = () => {
   const [form, setForm] = useState({ name: '', email: '', message: '' })
@@ -28,8 +45,13 @@ const ContactSection: React.FC = () => {
         body: JSON.stringify(form),
       })
       if (!res.ok) throw new Error('Failed')
-      showToast('success', 'Message sent!')
-      setForm({ name: '', email: '', message: '' })
+      const data = await res.json()
+      if (data.success) {
+        showToast('success', 'Message sent successfully! 🎉')
+        setForm({ name: '', email: '', message: '' })
+      } else {
+        throw new Error('Unexpected response')
+      }
     } catch {
       showToast('error', 'Failed to send message. Please try again.')
     } finally {
@@ -99,14 +121,33 @@ const ContactSection: React.FC = () => {
         </FadeIn>
       </form>
 
-      {/* Footer */}
-      <div className="flex justify-center gap-6 mt-20">
+      {/* Footer — Contact Links */}
+      <div className="flex justify-center items-center gap-6 mt-20 flex-wrap">
         <a
           href="mailto:kushalgt37@gmail.com"
           className="text-[#D7E2EA] opacity-60 hover:opacity-100 transition-opacity"
           aria-label="Email"
+          title="Email"
         >
           <Mail size={24} />
+        </a>
+        <a
+          href="tel:+919076860157"
+          className="text-[#D7E2EA] opacity-60 hover:opacity-100 transition-opacity"
+          aria-label="Phone"
+          title="Call +91 90768 60157"
+        >
+          <Phone size={24} />
+        </a>
+        <a
+          href="https://wa.me/919076860157"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[#D7E2EA] opacity-60 hover:opacity-100 transition-opacity"
+          aria-label="WhatsApp"
+          title="WhatsApp +91 90768 60157"
+        >
+          <WhatsAppIcon size={24} />
         </a>
         <a
           href="https://www.linkedin.com/in/kushalgupta2003/"
@@ -114,6 +155,7 @@ const ContactSection: React.FC = () => {
           rel="noopener noreferrer"
           className="text-[#D7E2EA] opacity-60 hover:opacity-100 transition-opacity"
           aria-label="LinkedIn"
+          title="LinkedIn"
         >
           <Linkedin size={24} />
         </a>
@@ -123,10 +165,18 @@ const ContactSection: React.FC = () => {
           rel="noopener noreferrer"
           className="text-[#D7E2EA] opacity-60 hover:opacity-100 transition-opacity"
           aria-label="GitHub"
+          title="GitHub"
         >
           <Github size={24} />
         </a>
       </div>
+
+      {/* Phone number text display */}
+      <FadeIn delay={0.5} y={10}>
+        <p className="text-center text-[#D7E2EA] opacity-40 mt-4 font-light text-sm tracking-wider">
+          +91 90768 60157
+        </p>
+      </FadeIn>
 
       {/* Toast */}
       {toast && (

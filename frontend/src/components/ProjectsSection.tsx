@@ -91,16 +91,39 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           <FadeIn delay={0.2} y={20} className="h-full min-h-0">
             <div
               className="bg-[#111111] rounded-[20px] sm:rounded-[28px] md:rounded-[36px]
-                p-4 sm:p-5 md:p-6 flex flex-col justify-between h-full gap-3"
+                p-4 sm:p-5 md:p-6 flex flex-col h-full gap-3 overflow-hidden"
             >
               <p
-                className="text-[#D7E2EA] font-light leading-relaxed opacity-80"
+                className="text-[#D7E2EA] font-light leading-relaxed opacity-80 shrink-0"
                 style={{ fontSize: 'clamp(0.75rem, 1.2vw, 1rem)' }}
               >
                 {project.description}
               </p>
 
-              <div className="flex flex-wrap gap-1.5">
+              {/* Highlights / Key Details */}
+              {project.highlights && project.highlights.length > 0 && (
+                <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar">
+                  <ul className="space-y-1.5">
+                    {project.highlights.map((highlight, hi) => (
+                      <li
+                        key={hi}
+                        className="flex items-start gap-2 text-[#D7E2EA] opacity-70"
+                        style={{ fontSize: 'clamp(0.65rem, 1vw, 0.85rem)' }}
+                      >
+                        <span
+                          className="shrink-0 mt-[5px] w-1.5 h-1.5 rounded-full"
+                          style={{
+                            background: 'linear-gradient(135deg, #7621B0, #11998e)',
+                          }}
+                        />
+                        <span className="font-light leading-snug">{highlight}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <div className="flex flex-wrap gap-1.5 shrink-0">
                 {project.tags.map((tag) => (
                   <span
                     key={tag}
@@ -114,16 +137,31 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
               </div>
 
               {(project.liveUrl || project.repoUrl) && (
-                <div className="border-t border-[#D7E2EA]/10 pt-3 mt-auto">
-                  <a
-                    href={project.liveUrl || project.repoUrl || '#'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[#D7E2EA] opacity-40 hover:opacity-100 transition-opacity
-                      font-light uppercase tracking-widest text-xs"
-                  >
-                    {project.repoUrl && !project.liveUrl ? 'View Source →' : 'View Project →'}
-                  </a>
+                <div className="border-t border-[#D7E2EA]/10 pt-3 mt-auto shrink-0">
+                  <div className="flex gap-4">
+                    {project.repoUrl && (
+                      <a
+                        href={project.repoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[#D7E2EA] opacity-40 hover:opacity-100 transition-opacity
+                          font-light uppercase tracking-widest text-xs"
+                      >
+                        View Source →
+                      </a>
+                    )}
+                    {project.liveUrl && (
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[#D7E2EA] opacity-40 hover:opacity-100 transition-opacity
+                          font-light uppercase tracking-widest text-xs"
+                      >
+                        Live Demo →
+                      </a>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
