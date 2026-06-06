@@ -51,7 +51,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const resend = new Resend(resendApiKey)
         const { data: emailData, error: resendError } = await resend.emails.send({
           from: 'Portfolio Contact <onboarding@resend.dev>',
-          to: 'kushalgt37@gmail.com',
+          to: 'mr.kushalgupta.kg@gmail.com',
           replyTo: email,
           subject: `New Portfolio Contact from ${name}`,
           html: `
